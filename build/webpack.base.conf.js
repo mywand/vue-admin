@@ -2,6 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -26,6 +27,10 @@ module.exports = {
       'scss_vars': '@/styles/vars.scss'
     }
   },
+  plugins: [
+      // make sure to include the plugin for the magic
+      new VueLoaderPlugin()
+  ],
   module: {
     rules: [
       {
