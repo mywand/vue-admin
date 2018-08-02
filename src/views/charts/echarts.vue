@@ -200,7 +200,7 @@
     }
 </script>
 
-<style scoped>
+<style slot-scoped>
     .chart-container {
         width: 100%;
         float: left;
