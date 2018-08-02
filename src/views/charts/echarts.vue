@@ -210,7 +210,7 @@
         float: left;
     }*/
 
-    .el-col {
+    /* .el-col {
         padding: 30px 20px;
-    }
+    } */
 </style>

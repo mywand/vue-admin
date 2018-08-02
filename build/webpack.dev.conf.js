@@ -14,7 +14,7 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 module.exports = merge(baseWebpackConfig, {
   mode:'development',
   optimization: {
-    minimize: true
+    minimize: false
   },
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
