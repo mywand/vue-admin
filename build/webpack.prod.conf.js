@@ -7,6 +7,7 @@ var baseWebpackConfig = require('./webpack.base.conf')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 //var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var MiniCssExtractPlugin = require("mini-css-extract-plugin")
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 var env = config.build.env
@@ -14,7 +15,10 @@ var env = config.build.env
 var webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   optimization: {
-    minimize: true
+    minimize: true,
+    splitChunks: {
+      chunks: 'all',
+    }
   },
   module: {
     rules: utils.styleLoaders({
@@ -43,11 +47,29 @@ var webpackConfig = merge(baseWebpackConfig, {
     // new ExtractTextPlugin({
     //   filename: utils.assetsPath('css/[name].[contenthash].css')
     // }),
+
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      //filename: "[name].css",
+      chunkFilename: "[id].[contenthash].css",
+      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      allChunks: true,
+    }),
+
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
+      assetNameRegExp: /\.style\.css$/g, //需要根据自己打包出来的文件名来写正则匹配这个配置是我自己的
+      cssProcessor: require('cssnano'),
+      canPrint: true,
       cssProcessorOptions: {
-        safe: true
+        //safe: true
+        discardComments: {
+          removeAll: true
+        },
+        parser: require('postcss-safe-parser'),
+        autoprefixer: false
       }
     }),
     // generate dist index.html with correct asset hash for caching.
@@ -108,10 +130,15 @@ var webpackConfig = merge(baseWebpackConfig, {
     // }),
     // copy custom static assets
     new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, '../static'),
-      to: config.build.assetsSubDirectory,
-      ignore: ['.*']
-    }])
+        from: path.resolve(__dirname, '../static'),
+        to: config.build.assetsSubDirectory,
+        ignore: ['.*']
+      },
+      {
+        from: 'src/assets/user.png',
+        to: 'static/img/user.png'
+      }
+    ])
   ]
 })
 
